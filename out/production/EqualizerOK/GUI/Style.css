@@ -13,11 +13,11 @@
 }
 
 .slider{
--fx-background-color: #e62739;
- -fx-background-insets: 0 0 -1 0, 0, 1;
-    -fx-background-radius: 10px;
-    -fx-margin:7px;
-    -fx-padding: 0.25em;
+-fx-control-inner-background: #e62739;
+  -fx-background-insets: 0 0 -1 0, 0, 1;
+     -fx-background-radius: 10px;
+     -fx-margin:7px;
+     -fx-padding: 0.25em; /* 3 */
 }
 
 #button_play{

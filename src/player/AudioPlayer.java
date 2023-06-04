@@ -1,6 +1,9 @@
 package player;
 
+import effects.Reverb;
+import effects.Overdrive;
 import equalizer.Equalizer;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -11,18 +14,26 @@ public class AudioPlayer {
     private final File currentMusicFile;
     private AudioInputStream audioStream;
     private SourceDataLine sourceDataLine;
-    public static final int BUFF_SIZE = 32000;
+    public static final int BUFF_SIZE = 50000;
     private final byte[] bufferBytes = new byte[BUFF_SIZE];
     private short[] bufferShort = new short[BUFF_SIZE / 2];
     private boolean pauseStatus;
     private boolean stopStatus;
     private double gain;
     private final Equalizer equalizer;
+    private final Reverb reverb;
+    private boolean isReverb;
+    private final Overdrive overdrive;
+    private boolean isOverdrive;
 
     public AudioPlayer(File musicFile) {
         this.currentMusicFile = musicFile;
         this.equalizer = new Equalizer();
         this.gain = 1.0;
+        this.isOverdrive = false;
+        this.overdrive = new Overdrive();
+        this.isReverb = false;
+        this.reverb = new Reverb();
     }
 
 
@@ -42,6 +53,14 @@ public class AudioPlayer {
                 if (this.pauseStatus) this.pause();
 
                 if (this.stopStatus) break;
+
+                if (this.isOverdrive) {
+                    this.overdrive(this.bufferShort);
+                }
+
+                if (this.isReverb) {
+                    this.reverb(this.bufferShort);
+                }
 
                 equalizer.setInputSignal(this.bufferShort);
                 this.equalizer.equalization();
@@ -109,6 +128,32 @@ public class AudioPlayer {
 
     public Equalizer getEqualizer() {
         return this.equalizer;
+    }
+
+    private void overdrive(short[] inputSamples) {
+        this.overdrive.setInputSampleStream(inputSamples);
+        this.overdrive.createEffect();
+    }
+
+    public boolean overdriveIsActive() {
+        return this.isOverdrive;
+    }
+
+    public void setOverdrive(boolean b) {
+        this.isOverdrive = b;
+    }
+
+    private void reverb(short[] inputSamples) throws ExecutionException, InterruptedException {
+        reverb.setInputSampleStream(inputSamples);
+        reverb.createEffect();
+    }
+
+    public boolean ReverbIsActive() {
+        return this.isReverb;
+    }
+
+    public void setReverb(boolean b) {
+        this.isReverb = b;
     }
 
 }

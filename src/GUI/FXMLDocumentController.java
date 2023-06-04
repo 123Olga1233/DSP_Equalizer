@@ -90,6 +90,22 @@ public class FXMLDocumentController implements Initializable {
         System.exit(0);
     }
 
+    @FXML
+    private void reverbBox() {
+        System.out.println("REVERB");
+        if (!this.audioPlayer.ReverbIsActive())
+            this.audioPlayer.setReverb(true);
+        else this.audioPlayer.setReverb(false);
+    }
+
+    @FXML
+    private void overdriveBox() {
+        System.out.println("OVERDRIVE");
+        if (!this.audioPlayer.overdriveIsActive())
+            this.audioPlayer.setOverdrive(true);
+        else this.audioPlayer.setOverdrive(false);
+    }
+
     private void resetSliders() {
         Slider0.setValue(1);
         Slider1.setValue(1);
